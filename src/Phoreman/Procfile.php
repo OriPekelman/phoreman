@@ -9,7 +9,7 @@ class Procfile
 {
   protected $proc_file_path="Procfile";
   protected $lines=[];
-  protected $entries=[];
+  public $entries=[];
   protected $env=[];
   protected $cwd=null;
   
@@ -50,11 +50,12 @@ class Procfile
     return $this->cwd;
   }
   
-  protected function start_proc($entry) {
+  protected function start_proc(&$entry) {
 
     $process = new Process($entry["command"], $this->cwd, $this->env);
     $process->start();
     $entry["pid"] = $process->getPid();
+    $entry["process"] = $process;
     if (empty($entry["pid"])){
       throw new \Exception($entry["name"]." could not be run");
     }
@@ -78,18 +79,16 @@ class Procfile
     if (file_exists($this->proc_file_path)) {
       $this->lines = file($this->proc_file_path, FILE_IGNORE_NEW_LINES);
     } else {
-      throw new \Exception($this->proc_file_path." not found");
+      throw new \Exception($this->proc_file_path." does not exist.");
       return null;
     }
     return $this->lines ;
   }
   
 
-  protected function filtered_entries($processes){
-    if (!empty($processes))
-      return array_intersect_key($this->entries, array_flip(explode(" ",$processes)));
-        else
-      return $this->entries;
+  protected function filter_entries($processes){
+    if (!empty($processes)) $this->entries = array_intersect_key($this->entries, array_flip(explode(" ",$processes)));
+    return $this->entries;
   }
     
   protected function parse(){
@@ -111,9 +110,11 @@ class Procfile
   function start($processes=[]) {
     $this->load();
     $this->parse();
-    foreach ($this->filtered_entries($processes) as $entry){
+    $this->filter_entries($processes);
+    foreach ($this->entries as &$entry){
       $this->start_proc($entry);
     }
+    return $this->entries;
   }
 }
 

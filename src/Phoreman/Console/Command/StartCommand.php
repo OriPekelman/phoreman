@@ -34,10 +34,24 @@ class StartCommand extends Command
     {
         $procfile = new Procfile();
         $procfile->set_concurrency($input->getOption('concurrency'));
-//        $procfile->set_env($input->getOption('env')); //not implemented yet
-//        $procfile->set_port($input->getOption('port')); //not implemented yet
         $procfile->set_procfile($input->getOption('procfile'));
         $procfile->set_root($input->getOption('root'));
-        $procfile->start($input->getArgument('processes'));
+        //        $procfile->set_env($input->getOption('env')); //not implemented yet
+        //        $procfile->set_port($input->getOption('port')); //not implemented yet
+        $entries = $procfile->start($input->getArgument('processes'));
+        foreach ($entries as $entry){ 
+         if(!empty($entry["pid"])) 
+         {
+           if ($entry["process"]->getExitCode()) {
+             $output->writeln("<error>".$entry["process"]-> getErrorOutput()."</error>");
+           } 
+           date_default_timezone_set('UTC');
+           echo($entry["pid"]);
+           $output->writeln(strftime('%H:%M:%S', time()) ." |". $entry["process"]->getOutput() . " started with pid " . $entry["pid"]);
+         }
+         else
+           $output->writeln($entry["pid"]." did not run");
+        }
+        
     }
 }
