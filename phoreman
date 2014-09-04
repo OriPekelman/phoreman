@@ -7,8 +7,14 @@ namespace Phoreman;
 
 use Skel\DependencyInjection\Application;
 
-// the autoloader
-$loader = require __DIR__ . '/vendor/autoload.php';
+define('CLI_ROOT', __DIR__);
+
+if (file_exists(CLI_ROOT . '/vendor/autoload.php')) {
+    require CLI_ROOT . '/vendor/autoload.php';
+} else {
+    // we are globally installed via Composer
+$loader =  require CLI_ROOT . '/../../autoload.php';
+}
 
 // create application
 $application = new Application(__NAMESPACE__);
