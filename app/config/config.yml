@@ -1,0 +1,9 @@
+imports:
+- { resource: build.yml }
+- { resource: services.yml }
+
+parameters:
+  application:
+    name:         Phoreman
+    slug:         phoreman    # Used to name the built phar
+    description:  "PHP Foreman clone see https://github.com/ddollar/foreman"

@@ -1,0 +1,21 @@
+{
+    "name": "oripekelman/phoreman",
+    "description": "foreman clone",
+    "license": "MIT",
+	"require": {
+	    "symfony/console":                 "2.*",
+	    "symfony/filesystem":              "2.*",
+	    "symfony/finder":                  "2.*",
+	    "symfony/yaml":                    "2.*",
+	    "symfony/config":                  "2.*",
+	    "symfony/process":                  "2.*",
+	    "symfony/dependency-injection":    "2.*"
+	},  
+	
+    "autoload": {
+        "psr-0": {
+            "Phoreman": "src/",
+            "Skel": "src/"
+         }
+    }
+}
