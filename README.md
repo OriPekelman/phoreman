@@ -1,3 +1,5 @@
+# [NOT MAINTAINED] please take over
+
 #Phoreman a foreman clone in PHP
 
 Please excuse my utter ignorance of PHP and total lack of tests for the origin see :
